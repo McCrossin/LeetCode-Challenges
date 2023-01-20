@@ -128,53 +128,75 @@ class Solution:
                                                     if val == dict[dictIndex][0] or val == dict[dictIndex][1]:
                                                         dict[currentIndex].remove(val)
 
-                            for val in dict[dictIndex]:
-                                allRowValues.append(val)
+                            if (i+1)%3 == 0 and (j+1)%3 == 0:
+                                rowNum = i - 2
+                                boxNum = j - 2
+                                for loopNum in range (1, 10):
+                                    currentIndex = rowNum * 9 + boxNum
+                                    if currentIndex in dict:
+                                        for val in dict[currentIndex]:
+                                            allBoxValues.append(val)
+                                        if loopNum%3 == 0:
+                                            rowNum += 1
+                                            boxNum -= 2
+                                        else:
+                                            boxNum += 1
 
-                            if i == 8:
                                 uniqueBoxValues = uniqueElements(allBoxValues)     
                                 if len(uniqueBoxValues) > 0:
                                     for val in uniqueBoxValues:
-                                        for n in range (1,10):
-                                            currentIndex = rowIndex*9 + boxIndex
-                                            if val in dict[currentIndex]:
-                                                dict[currentIndex].remove(val)
+                                        rowNum = i - 2
+                                        boxNum = j - 2
+                                        for loopNum in range (1,10):
+                                            currentIndex = rowNum*9 + boxNum
+                                            if currentIndex in dict:
+                                                if val in dict[currentIndex]:
+                                                    dict[currentIndex].remove(val)
 
-                                            boxIndex += 1
-                                            if (checkPairsBox%3) == 0:
-                                                boxIndex -= 3
-                                                rowIndex += 1
-                                            
-                                if len(dict) != 0 and len(dict[dictIndex]) == 1:
-                                    board[i][j] = dict[dictIndex][0]
-                                    del dict[dictIndex]
-                            
+                                                if loopNum%3 == 0:
+                                                    rowNum += 1
+                                                    boxNum -= 2
+                                                else:
+                                                    boxNum += 1
                             if i == 8:
                                 for rowNum in range (0, 9):
                                     currentIndex = rowNum * 9 + j
-                                    for val in dict[currentIndex]:
-                                        allRowValues.append(val)
-                                        #todo move columnm check here
+                                    if currentIndex in dict:
+                                        for val in dict[currentIndex]:
+                                            allColumnValues.append(val)
+                                    
+                                uniqueColumnValues = uniqueElements(allColumnValues)  
+                                if len(uniqueColumnValues) > 0:
+                                    for val in uniqueColumnValues:
+                                        for rowNum in range (0,9):
+                                            currentIndex = rowNum*9 + j
+                                            if currentIndex in dict:
+                                                if val in dict[currentIndex]:
+                                                    dict[currentIndex].remove(val)
+
+                                
+                            if len(dict) != 0 and len(dict[dictIndex]) == 1:
+                                board[i][j] = dict[dictIndex][0]
+                                del dict[dictIndex]
+                                    
+                            if dictIndex in dict:
+                                for val in dict[dictIndex]:
+                                    allRowValues.append(val)
+                            
+                            
 
         #Check if any of the possible values in the remaining cells are unique
         #print (allRowValues) 
             uniqueRowValues = uniqueElements(allRowValues)
-            uniqueColumnValues = uniqueElements(allColumnValues)  
 
             if len(uniqueRowValues) > 0: 
                 for val in uniqueRowValues:
                     for n in range (0,9):
                         currentIndex = i*9 + n
-                        if val in dict[currentIndex]:
-                            dict[currentIndex].remove(val)
-            if len(uniqueColumnValues) > 0:
-                for val in uniqueColumnValues:
-                    #todo
-                    for n in range (0,9):
-                        currentIndex = n*9 + 8
-                        if val in dict[currentIndex]:
-                            dict[currentIndex].remove(val)
-
+                        if currentIndex in dict:
+                            if val in dict[currentIndex]:
+                                dict[currentIndex].remove(val)
+            
 
         
         loopNumber +=1
